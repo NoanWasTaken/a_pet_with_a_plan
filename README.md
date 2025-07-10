@@ -1,61 +1,248 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🐾 A Pet with a Plan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Site e-commerce de vente d'accessoires et services pour animaux de compagnie.
 
-## About Laravel
+## Installation et Lancement du Projet
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Prérequis
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Avant de commencer, assurez-vous d'avoir installé :
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Docker Desktop** (macOS/Windows) ou **Docker Engine** (Linux)
+- **Git**
+- **Composer** (pour Laravel Sail)
 
-## Learning Laravel
+### Installation Rapide
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. **Cloner le repository**
+   ```bash
+   git clone [URL_DU_REPO] a_pet_with_a_plan
+   cd a_pet_with_a_plan
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. **Installer les dépendances PHP**
+   ```bash
+   composer install
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. **Configurer l'environnement**
+   ```bash
+   # Copier le fichier d'environnement
+   cp .env.example .env
+   
+   # Générer la clé d'application Laravel
+   ./vendor/bin/sail artisan key:generate
+   ```
 
-## Laravel Sponsors
+4. **Démarrer l'environnement de développement**
+   ```bash
+   # Option 1: Script automatique (recommandé)
+   chmod +x dev-start.sh (seulement la première fois)
+   ./dev-start.sh
+   
+   # Option 2: Commandes manuelles
+   ./vendor/bin/sail up -d
+   ./vendor/bin/sail artisan migrate:fresh --seed
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Accès à l'Application
 
-### Premium Partners
+- **Application Laravel :** http://localhost
+- **Dashboard Admin :** http://localhost/admin
+- **Serveur Vite (dev) :** http://localhost:5173
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Comptes de Test
 
-## Contributing
+Après le seeding, vous pouvez utiliser ces comptes :
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# Voir tous les utilisateurs créés
+./vendor/bin/sail artisan tinker
+>>> User::all(['email', 'role']);
+```
 
-## Code of Conduct
+## Commandes de Développement
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Gestion des Services Docker
 
-## Security Vulnerabilities
+```bash
+# Démarrer tous les services
+./vendor/bin/sail up -d
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Arrêter tous les services
+./vendor/bin/sail down
 
-## License
+# Redémarrer un service spécifique
+./vendor/bin/sail restart vite
+./vendor/bin/sail restart laravel.test
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Voir les logs
+./vendor/bin/sail logs laravel.test
+./vendor/bin/sail logs vite
+./vendor/bin/sail logs mysql
+```
+
+### Base de Données
+
+```bash
+# Exécuter les migrations
+./vendor/bin/sail artisan migrate
+
+# Réinitialiser complètement la BDD avec données de test
+./vendor/bin/sail artisan migrate:fresh --seed
+
+# Accéder à MySQL
+./vendor/bin/sail mysql
+
+# Créer une nouvelle migration
+./vendor/bin/sail artisan make:migration create_example_table
+```
+
+### Assets Frontend (CSS/JS)
+
+```bash
+# Mode développement (avec hot reload)
+./vendor/bin/sail npm run dev
+
+# Installer les dépendances npm
+./vendor/bin/sail npm install
+
+# Compilation pour la production
+./vendor/bin/sail npm run build
+
+# Vérifier les assets compilés
+ls -la public/build/assets/
+```
+
+### Cache et Optimisation
+
+```bash
+# Nettoyer tous les caches Laravel
+./vendor/bin/sail artisan optimize:clear
+
+# Nettoyer un cache spécifique
+./vendor/bin/sail artisan cache:clear
+./vendor/bin/sail artisan config:clear
+./vendor/bin/sail artisan route:clear
+./vendor/bin/sail artisan view:clear
+```
+
+## Structure du Projet
+
+### Fonctionnalités Principales
+
+- **Dashboard Admin** (`/admin`) - Accès sécurisé pour admins et modérateurs
+- **CRUD Complet** pour :
+  -  Utilisateurs
+  -  Produits (avec upload d'images)
+  -  Articles (avec upload d'images)
+  -  Questions (FAQ)
+  -  Notes/Avis
+  -  Commandes
+
+### Technologies Utilisées
+
+- **Backend :** Laravel 11 avec PHP 8.4
+- **Frontend :** Blade Templates + Tailwind CSS + Vite
+- **Base de Données :** MySQL 8.0
+- **Containerisation :** Docker avec Laravel Sail
+- **Cache :** Redis
+- **Recherche :** Meilisearch
+- **Mail :** Mailpit (développement)
+
+### Architecture
+
+```
+app/
+├── Http/Controllers/          # Contrôleurs CRUD
+├── Models/                   # Modèles Eloquent
+├── Http/Middleware/          # Middleware (AdminMiddleware)
+└── Http/Requests/           # Validation des formulaires
+
+resources/
+├── views/                   # Templates Blade
+├── css/app.css             # Styles Tailwind
+└── js/app.js               # JavaScript
+
+database/
+├── migrations/             # Migrations de base de données
+└── seeders/               # Données de test
+```
+
+## Sécurité et Accès
+
+### Middleware de Sécurité
+
+- **AdminMiddleware** : Vérifie les rôles `admin` et `moderateur`
+- Protection CSRF sur tous les formulaires
+- Validation des uploads d'images
+
+### Gestion des Rôles
+
+```php
+// Rôles disponibles
+'user'       // Utilisateur standard
+'moderateur' // Modérateur (accès admin limité)
+'admin'      // Administrateur complet
+```
+
+## Résolution de Problèmes
+
+### Problème : Assets CSS/JS non chargés
+
+```bash
+# Vérifier que Vite fonctionne
+./vendor/bin/sail logs vite
+
+# Redémarrer Vite si nécessaire
+./vendor/bin/sail restart vite
+
+# Nettoyer le cache
+./vendor/bin/sail artisan optimize:clear
+```
+
+### Problème : Base de données inaccessible
+
+```bash
+# Vérifier le statut de MySQL
+./vendor/bin/sail logs mysql
+
+# Redémarrer MySQL
+./vendor/bin/sail restart mysql
+
+# Vérifier la connexion
+./vendor/bin/sail artisan tinker
+>>> DB::connection()->getPdo();
+```
+
+### Problème : Ports déjà utilisés
+
+Modifier les ports dans `.env` :
+```env
+APP_PORT=8080              # Au lieu de 80
+FORWARD_DB_PORT=3307       # Au lieu de 3306
+FORWARD_VITE_PORT=5174     # Au lieu de 5173
+```
+
+## Notes de Développement
+
+### Prix des Produits
+
+Les prix sont stockés en **centimes** dans la base de données mais affichés en **euros** :
+
+```php
+// Dans le modèle Produit
+public function setPrixAttribute($value) {
+    $this->attributes['prix'] = $value * 100; // Conversion euros → centimes
+}
+
+public function getPrixEurosAttribute() {
+    return $this->prix / 100; // Conversion centimes → euros
+}
+```
+
+### Upload d'Images
+
+- **Produits :** Upload + suppression automatique
+- **Articles :** Upload seulement (pas de suppression automatique)
+- Stockage dans `storage/app/public/`
