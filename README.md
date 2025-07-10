@@ -16,7 +16,7 @@ Avant de commencer, assurez-vous d'avoir installé :
 
 1. **Cloner le repository**
    ```bash
-   git clone [URL_DU_REPO] a_pet_with_a_plan
+   git clone https://github.com/NoanWasTaken/a_pet_with_a_plan.git
    cd a_pet_with_a_plan
    ```
 
