@@ -105,16 +105,22 @@ class CheckoutController extends Controller
             }
 
             // Préparer les line items pour Stripe
+            $user = auth()->user();
+            $userCurrency = strtolower($user->devise_preferee ?? 'eur');
             $lineItems = [];
             foreach ($cart->items as $item) {
+                // Convertir le prix en centimes de la devise de l'utilisateur
+                $priceInUserCurrency = $user->convertFromEuros($item->price / 100);
+                $priceInUserCurrencyCents = (int) round($priceInUserCurrency * 100);
+                
                 $lineItems[] = [
                     'price_data' => [
-                        'currency' => 'eur',
+                        'currency' => $userCurrency,
                         'product_data' => [
                             'name' => $item->produit->nom,
                             'description' => $item->produit->description,
                         ],
-                        'unit_amount' => $item->price, // Prix en centimes
+                        'unit_amount' => $priceInUserCurrencyCents, // Prix en centimes de la devise utilisateur
                     ],
                     'quantity' => $item->quantity,
                 ];

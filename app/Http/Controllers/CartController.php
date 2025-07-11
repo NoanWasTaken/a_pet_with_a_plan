@@ -15,8 +15,12 @@ class CartController extends Controller
     // Afficher le panier
     public function index(): View
     {
-        $cart = $this->getOrCreateCart();
-        $cart->load(['items.produit']);
+        if (auth()->check()) {
+            $cart = $this->getOrCreateCart();
+            $cart->load(['items.produit']);
+        } else {
+            $cart = null;
+        }
         
         return view('public.cart.index', compact('cart'));
     }
