@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Produit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProduitController extends Controller
 {
@@ -29,14 +31,23 @@ class ProduitController extends Controller
             'nom' => 'required|string|max:72',
             'prix' => 'required|numeric|min:0',
             'description' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'categorie' => 'required|in:Chien,Chat',
+            'image' => 'required|file|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB max
+        ], [
+            'image.required' => 'Une image est requise.',
+            'image.mimes' => 'L\'image doit être un fichier de type: jpeg, png, jpg, gif ou webp.',
+            'image.max' => 'L\'image ne doit pas dépasser 5 MB.',
+            'image.file' => 'Le champ image doit être un fichier valide.'
         ]);
 
         // Gérer l'upload de l'image
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $imagePath = $request->file('image')->store('produits', 'public');
-            $validated['image'] = $imagePath;
+            $validated['image_path'] = $imagePath;
         }
+        
+        // Supprimer le champ image de validated car on utilise image_path
+        unset($validated['image']);
 
         Produit::create($validated);
 
@@ -59,18 +70,39 @@ class ProduitController extends Controller
     // Mettre à jour un produit spécifique en base de données.
     public function update(Request $request, Produit $produit): RedirectResponse
     {
+        // Debug: Afficher les informations du fichier uploadé
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            Log::info('Upload Debug:', [
+                'original_name' => $file->getClientOriginalName(),
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize(),
+                'extension' => $file->getClientOriginalExtension(),
+                'is_valid' => $file->isValid(),
+                'error' => $file->getError()
+            ]);
+        }
+
         $validated = $request->validate([
             'nom' => 'required|string|max:72',
             'prix' => 'required|numeric|min:0',
             'description' => 'required|string',
-            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'categorie' => 'required|in:Chien,Chat',
+            'image' => 'sometimes|file|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB max
+        ], [
+            'image.mimes' => 'L\'image doit être un fichier de type: jpeg, png, jpg, gif ou webp.',
+            'image.max' => 'L\'image ne doit pas dépasser 5 MB.',
+            'image.file' => 'Le champ image doit être un fichier valide.'
         ]);
 
         // Gérer l'upload de l'image si une nouvelle image est fournie
-        if ($request->hasFile('image')) {
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $imagePath = $request->file('image')->store('produits', 'public');
-            $validated['image'] = $imagePath;
+            $validated['image_path'] = $imagePath;
         }
+        
+        // Supprimer le champ image de validated car on utilise image_path
+        unset($validated['image']);
 
         $produit->update($validated);
 
