@@ -57,7 +57,7 @@
                                 <div>
                                     <h3 class="text-sm font-medium text-gray-600 mb-1">Total</h3>
                                     <p class="text-lg font-bold text-green-600">
-                                        {{ number_format($commande->montant / 100, 2, ',', ' ') }} €
+                                        {{ $commande->total_formate }}
                                     </p>
                                 </div>
                             </div>
@@ -138,7 +138,7 @@
                         <div class="p-6 space-y-4">
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-600">Sous-total</span>
-                                <span class="font-medium">{{ number_format($commande->montant / 100, 2, ',', ' ') }} €</span>
+                                <span class="font-medium">{{ $commande->total_formate }}</span>
                             </div>
                             
                             <div class="flex justify-between text-sm">
@@ -149,7 +149,7 @@
                             <div class="border-t pt-4">
                                 <div class="flex justify-between">
                                     <span class="text-lg font-semibold text-gray-800">Total</span>
-                                    <span class="text-lg font-bold text-green-600">{{ number_format($commande->montant / 100, 2, ',', ' ') }} €</span>
+                                    <span class="text-lg font-bold text-green-600">{{ $commande->total_formate }}</span>
                                 </div>
                             </div>
                         </div>

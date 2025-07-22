@@ -16,6 +16,11 @@ class Commande extends Model
     protected $fillable = [
         'id_utilisateur',
         'date_commande',
+        'total',
+        'statut',
+        'devise',
+        'stripe_session_id',
+        'stripe_payment_intent',
     ];
 
     protected $casts = [
@@ -39,11 +44,35 @@ class Commande extends Model
     // Calcule le montant total de la commande.
     public function getPrixTotalAttribute()
     {
+        // Si le total est stocké en base, l'utiliser (Stripe stocke en centimes)
+        if ($this->attributes['total'] > 0) {
+            return $this->attributes['total'] / 100;
+        }
+        
+        // Sinon, calculer à partir des produits (fallback)
         $total = 0;
         foreach ($this->produits as $produit) {
             $total += $produit->pivot->quantite * $produit->pivot->prix_unitaire;
         }
         return $total / 100; // Convertir en euros pour l'affichage
+    }
+
+    // Récupère le total formaté avec la devise
+    public function getTotalFormateAttribute()
+    {
+        $total = $this->prix_total;
+        $devise = $this->devise ?? 'EUR';
+        
+        $symbols = [
+            'EUR' => '€',
+            'USD' => '$',
+            'GBP' => '£',
+            'CAD' => 'C$',
+        ];
+
+        $symbol = $symbols[$devise] ?? $devise;
+        
+        return number_format($total, 2) . $symbol;
     }
 
     // Scope pour récupérer les commandes récentes.
@@ -72,5 +101,38 @@ class Commande extends Model
     {
         return $query->whereMonth('date_commande', now()->month)
                     ->whereYear('date_commande', now()->year);
+    }
+
+    // Récupère les statuts disponibles.
+    public static function getStatuts()
+    {
+        return [
+            'en_attente' => 'En attente',
+            'confirmee' => 'Confirmée',
+            'en_cours' => 'En cours',
+            'livree' => 'Livrée',
+            'annulee' => 'Annulée',
+            'echouee' => 'Échouée',
+        ];
+    }
+
+    // Formatte le statut pour l'affichage.
+    public function getStatutFormateAttribute()
+    {
+        return self::getStatuts()[$this->statut] ?? $this->statut;
+    }
+
+    // Récupère la classe CSS pour le statut.
+    public function getStatutCssClassAttribute()
+    {
+        return match($this->statut) {
+            'en_attente' => 'bg-yellow-100 text-yellow-800',
+            'confirmee' => 'bg-blue-100 text-blue-800',
+            'en_cours' => 'bg-purple-100 text-purple-800',
+            'livree' => 'bg-green-100 text-green-800',
+            'annulee' => 'bg-gray-100 text-gray-800',
+            'echouee' => 'bg-red-100 text-red-800',
+            default => 'bg-gray-100 text-gray-800',
+        };
     }
 }

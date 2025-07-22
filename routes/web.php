@@ -76,6 +76,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Routes pour les commandes
     Route::resource('commandes', CommandeController::class);
+    Route::patch('commandes/{commande}/statut', [CommandeController::class, 'updateStatut'])->name('commandes.update-statut');
 });
 
 require __DIR__.'/auth.php';

@@ -31,8 +31,15 @@
                         </div>
                         
                         <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Statut</label>
+                            <span class="mt-1 inline-block px-3 py-1 text-xs font-medium rounded-full {{ $commande->statut_css_class }}">
+                                {{ $commande->statut_formate }}
+                            </span>
+                        </div>
+                        
+                        <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Montant total</label>
-                            <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ number_format($commande->prix_total, 2) }}€</p>
+                            <p class="mt-1 text-sm text-gray-900 dark:text-gray-100">{{ $commande->total_formate }}</p>
                         </div>
                     </div>
                     
