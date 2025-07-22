@@ -14,7 +14,7 @@ class ProfileController extends Controller
     // Affiche le formulaire de profil de l'utilisateur.
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('public.profile.edit', [
             'user' => $request->user(),
         ]);
     }

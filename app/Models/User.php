@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'email',
         'mot_de_passe',
         'statut',
+        'devise_preferee',
     ];
 
     // The attributes that should be hidden for serialization.
@@ -96,5 +98,78 @@ class User extends Authenticatable
     public function commandes(): HasMany
     {
         return $this->hasMany(Commande::class, 'id_utilisateur');
+    }
+
+    // Récupère le panier de l'utilisateur.
+    public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class);
+    }
+
+    // Récupère le symbole de la devise préférée
+    public function getCurrencySymbol()
+    {
+        $devise = $this->devise_preferee ?? 'EUR';
+        
+        $symbols = [
+            'EUR' => '€',
+            'USD' => '$',
+            'GBP' => '£',
+            'CAD' => 'C$',
+        ];
+        
+        return $symbols[$devise] ?? '€';
+    }
+
+    // Formate le prix avec le symbole de devise approprié
+    public function formatPrice($priceInCents)
+    {
+        $priceInEuros = $priceInCents / 100;
+        $convertedPrice = $this->convertFromEuros($priceInEuros);
+        $symbol = $this->getCurrencySymbol();
+        
+        return number_format($convertedPrice, 2, ',', ' ') . ' ' . $symbol;
+    }
+
+    // Convertit un prix en euros vers la devise préférée de l'utilisateur
+    public function convertFromEuros($priceInEuros)
+    {
+        $devise = $this->devise_preferee ?? 'EUR';
+        
+        // Taux de change approximatifs (dans un vrai projet, utiliser une API)
+        $exchangeRates = [
+            'EUR' => 1.0,
+            'USD' => 1.10,
+            'GBP' => 0.85,
+            'CAD' => 1.50,
+        ];
+        
+        $rate = $exchangeRates[$devise] ?? 1.0;
+        return $priceInEuros * $rate;
+    }
+
+    // Convertit un prix de la devise préférée vers des centimes d'euros (pour Stripe)
+    public function convertToEurosCents($priceInUserCurrency)
+    {
+        $devise = $this->devise_preferee ?? 'EUR';
+        
+        // Taux de change approximatifs (inverses)
+        $exchangeRates = [
+            'EUR' => 1.0,
+            'USD' => 1/1.10,
+            'GBP' => 1/0.85,
+            'CAD' => 1/1.50,
+        ];
+        
+        $rate = $exchangeRates[$devise] ?? 1.0;
+        $priceInEuros = $priceInUserCurrency * $rate;
+        return (int) round($priceInEuros * 100);
+    }
+
+    // Méthode statique pour formater le prix pour les invités
+    public static function formatPriceGuest($priceInCents)
+    {
+        $priceInEuros = $priceInCents / 100;
+        return number_format($priceInEuros, 2, ',', ' ') . ' €';
     }
 }

@@ -16,7 +16,8 @@ class Produit extends Model
         'nom',
         'prix',
         'description',
-        'image',
+        'image_path',
+        'categorie',
     ];
 
     protected $casts = [
@@ -36,6 +37,16 @@ class Produit extends Model
     public function getPrixEurosAttribute()
     {
         return $this->prix / 100;
+    }
+
+    // Accesseur pour afficher le prix formaté selon la devise de l'utilisateur
+    public function getPrixFormateAttribute()
+    {
+        if (auth()->check()) {
+            return auth()->user()->formatPrice($this->prix);
+        }
+        
+        return User::formatPriceGuest($this->prix);
     }
 
     // Récupère les notes pour ce produit.
