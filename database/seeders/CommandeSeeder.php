@@ -23,12 +23,16 @@ class CommandeSeeder extends Seeder
         }
         
         // Créer quelques commandes
+        $statuts = ['en_attente', 'confirmee', 'en_cours', 'livree', 'annulee'];
+        
         for ($i = 0; $i < 5; $i++) {
             $utilisateur = $utilisateurs->random();
             
             $commande = Commande::create([
                 'id_utilisateur' => $utilisateur->id,
                 'date_commande' => Carbon::now()->subDays(rand(1, 30)),
+                'statut' => $statuts[array_rand($statuts)], // Statut aléatoire
+                'total' => rand(1000, 10000), // Total aléatoire entre 10€ et 100€ (en centimes)
             ]);
             
             // Ajouter 1 à 3 produits aléatoires à chaque commande
