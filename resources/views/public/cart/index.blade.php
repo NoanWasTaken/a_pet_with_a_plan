@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Fonction pour mettre à jour la quantité
     function updateQuantity(itemId, quantity) {
-        fetch(`/cart/item/${itemId}`, {
+        fetch(`/cart/${itemId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Fonction pour supprimer un article
     function removeItem(itemId) {
-        fetch(`/cart/item/${itemId}`, {
+        fetch(`/cart/${itemId}`, {
             method: 'DELETE',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
