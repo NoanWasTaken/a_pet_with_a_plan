@@ -38,14 +38,13 @@ class Produit extends Model
         return $this->prix / 100;
     }
 
-    // Accesseur pour afficher le prix formaté selon la devise de l'utilisateur
     public function getPrixFormateAttribute()
     {
         if (auth()->check()) {
             return auth()->user()->formatPrice($this->prix);
         }
         
-        return User::formatPriceGuest($this->prix);
+        return \App\Models\User::formatPriceGuest($this->prix);
     }
 
     // Récupère les notes pour ce produit.

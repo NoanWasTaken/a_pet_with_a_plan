@@ -7,13 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-    /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('utilisateur', function (Blueprint $table) {
-            $table->enum('devise_preferee', ['EUR', 'USD', 'GBP', 'CAD'])->default('EUR')->after('statut');
+            //
         });
     }
 
@@ -23,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('utilisateur', function (Blueprint $table) {
-            $table->dropColumn('devise_preferee');
+            //
         });
     }
 };

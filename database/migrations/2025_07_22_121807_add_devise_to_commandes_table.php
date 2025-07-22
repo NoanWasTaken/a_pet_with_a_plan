@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('utilisateur', function (Blueprint $table) {
-            $table->enum('devise_preferee', ['EUR', 'USD', 'GBP', 'CAD'])->default('EUR')->after('promotions');
+        Schema::table('commande', function (Blueprint $table) {
+            $table->string('devise', 3)->default('EUR')->after('statut');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('utilisateur', function (Blueprint $table) {
-            $table->dropColumn('devise_preferee');
+        Schema::table('commande', function (Blueprint $table) {
+            $table->dropColumn('devise');
         });
     }
 };

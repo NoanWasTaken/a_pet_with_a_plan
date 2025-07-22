@@ -16,6 +16,11 @@ class Commande extends Model
     protected $fillable = [
         'id_utilisateur',
         'date_commande',
+        'total',
+        'statut',
+        'devise',
+        'stripe_session_id',
+        'stripe_payment_intent',
     ];
 
     protected $casts = [

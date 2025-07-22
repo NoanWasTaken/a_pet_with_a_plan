@@ -88,13 +88,19 @@ class CheckoutController extends Controller
             
             // Créer la commande en base avant le paiement
             \Log::info('Création de la commande en base');
+            $user = auth()->user();
+            
+            // Convertir le total en devise utilisateur
+            $totalInUserCurrency = $user->convertFromEuros($cart->total / 100);
+            
             $commande = Commande::create([
                 'id_utilisateur' => auth()->id(),
-                'total' => $cart->total,
+                'total' => (int) round($totalInUserCurrency * 100), // Stocker en centimes de la devise utilisateur
                 'statut' => 'en_attente',
                 'date_commande' => now(),
+                'devise' => $user->devise_preferee ?? 'EUR', // Ajouter la devise
             ]);
-            \Log::info('Commande créée avec ID: ' . $commande->id);
+            \Log::info('Commande créée avec ID: ' . $commande->id . ', Total: ' . $totalInUserCurrency . ' ' . $user->devise_preferee);
 
             // Ajouter les produits à la commande
             foreach ($cart->items as $item) {
@@ -108,6 +114,7 @@ class CheckoutController extends Controller
             $user = auth()->user();
             $userCurrency = strtolower($user->devise_preferee ?? 'eur');
             $lineItems = [];
+            
             foreach ($cart->items as $item) {
                 // Convertir le prix en centimes de la devise de l'utilisateur
                 $priceInUserCurrency = $user->convertFromEuros($item->price / 100);
