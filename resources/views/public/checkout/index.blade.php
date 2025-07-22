@@ -30,14 +30,14 @@
                                         <label for="prenom" class="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
                                         <input type="text" id="prenom" name="prenom" 
                                                value="{{ auth()->user()->prenom ?? '' }}" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
                                                required>
                                     </div>
                                     <div>
                                         <label for="nom" class="block text-sm font-medium text-gray-700 mb-2">Nom</label>
                                         <input type="text" id="nom" name="nom" 
                                                value="{{ auth()->user()->nom ?? '' }}" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
                                                required>
                                     </div>
                                 </div>
@@ -46,14 +46,14 @@
                                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                                     <input type="email" id="email" name="email" 
                                            value="{{ auth()->user()->email ?? '' }}" 
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
                                            required>
                                 </div>
                                 
                                 <div class="mt-4">
                                     <label for="adresse" class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
                                     <input type="text" id="adresse" name="adresse" 
-                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
                                            required>
                                 </div>
                                 
@@ -61,13 +61,13 @@
                                     <div>
                                         <label for="code_postal" class="block text-sm font-medium text-gray-700 mb-2">Code postal</label>
                                         <input type="text" id="code_postal" name="code_postal" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
                                                required>
                                     </div>
                                     <div>
                                         <label for="ville" class="block text-sm font-medium text-gray-700 mb-2">Ville</label>
                                         <input type="text" id="ville" name="ville" 
-                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" 
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" 
                                                required>
                                     </div>
                                 </div>
@@ -91,7 +91,7 @@
                                 <!-- Bouton de paiement -->
                                 <button type="button" 
                                         id="submit-payment" 
-                                        class="w-full bg-purple-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-purple-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        class="w-full bg-gray-800 text-white px-6 py-4 rounded-lg font-semibold hover:bg-gray-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
                                     <span id="button-text">Procéder au paiement</span>
                                     <span id="spinner" class="hidden">
                                         <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -123,10 +123,18 @@
                                 <div class="space-y-4 mb-6">
                                     @foreach($cart->items as $item)
                                         <div class="flex items-center gap-3">
-                                            <div class="w-12 h-12 bg-gradient-to-br from-{{ $item->produit->categorie === 'Chien' ? 'orange' : 'purple' }}-100 to-{{ $item->produit->categorie === 'Chien' ? 'orange' : 'purple' }}-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                                <span class="text-lg">
-                                                    {{ $item->produit->categorie === 'Chien' ? '🐕' : '🐱' }}
-                                                </span>
+                                            <div class="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                                                @if($item->produit->image_path)
+                                                    <img src="{{ asset('storage/' . $item->produit->image_path) }}" 
+                                                         alt="{{ $item->produit->nom }}"
+                                                         class="w-full h-full object-cover">
+                                                @else
+                                                    <div class="w-full h-full bg-gradient-to-br from-{{ $item->produit->categorie === 'Chien' ? 'orange' : 'purple' }}-100 to-{{ $item->produit->categorie === 'Chien' ? 'orange' : 'purple' }}-200 rounded-lg flex items-center justify-center">
+                                                        <span class="text-lg">
+                                                            {{ $item->produit->categorie === 'Chien' ? '🐕' : '🐱' }}
+                                                        </span>
+                                                    </div>
+                                                @endif
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 <h4 class="text-sm font-medium text-gray-800 truncate">{{ $item->produit->nom }}</h4>
@@ -174,7 +182,7 @@
                     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Votre panier est vide</h2>
                     <p class="text-gray-600 mb-8">Ajoutez des produits à votre panier pour procéder au checkout.</p>
                     <a href="{{ route('shop.index') }}" 
-                       class="bg-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-purple-700 transition duration-300">
+                       class="bg-gray-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-700 transition duration-300">
                         Voir la boutique
                     </a>
                 </div>
