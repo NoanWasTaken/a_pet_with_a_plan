@@ -19,6 +19,14 @@ echo "🗄️ Configuration de la base de données..."
 ./vendor/bin/sail artisan migrate --force
 ./vendor/bin/sail artisan db:seed --force
 
+# Créer les répertoires de stockage nécessaires
+echo "📁 Création des répertoires de stockage..."
+./vendor/bin/sail artisan storage:link
+./vendor/bin/sail exec laravel.test mkdir -p /var/www/html/storage/framework/sessions
+./vendor/bin/sail exec laravel.test mkdir -p /var/www/html/storage/framework/cache
+./vendor/bin/sail exec laravel.test mkdir -p /var/www/html/storage/framework/views
+./vendor/bin/sail exec laravel.test chmod -R 775 /var/www/html/storage
+
 echo ""
 echo "✅ Environnement prêt !"
 echo "🌐 Application Laravel : http://localhost"
