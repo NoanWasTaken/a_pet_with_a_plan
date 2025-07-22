@@ -17,7 +17,6 @@ echo "🔍 Vérification du statut de Vite..."
 # Exécuter les migrations et seeders si nécessaire
 echo "🗄️ Configuration de la base de données..."
 ./vendor/bin/sail artisan migrate --force
-./vendor/bin/sail artisan db:seed --force
 
 echo ""
 echo "✅ Environnement prêt !"
