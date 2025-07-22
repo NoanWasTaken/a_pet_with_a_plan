@@ -128,8 +128,8 @@
                                 <article
                                     class="bg-white rounded-lg shadow-md hover:shadow-xl transition duration-300 overflow-hidden">
                                     <div class="overflow-hidden">
-                                        @if($related->image)
-                                            <img src="{{ asset('storage/' . $related->image) }}" alt="{{ $related->titre }}"
+                                        @if($related->image_path)
+                                            <img src="{{ asset('storage/' . $related->image_path) }}" alt="{{ $related->titre }}"
                                                 class="object-cover w-full h-48">
                                         @elseif($related->banniere_article)
                                             <img src="{{ asset('storage/' . $related->banniere_article) }}" alt="{{ $related->titre }}"
