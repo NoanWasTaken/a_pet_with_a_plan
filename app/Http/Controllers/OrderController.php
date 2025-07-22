@@ -16,7 +16,7 @@ class OrderController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('orders.index', compact('commandes'));
+        return view('public.orders.index', compact('commandes'));
     }
 
     // Afficher les détails d'une commande
@@ -29,6 +29,6 @@ class OrderController extends Controller
 
         $commande->load(['produits', 'utilisateur']);
 
-        return view('orders.show', compact('commande'));
+        return view('public.orders.show', compact('commande'));
     }
 }

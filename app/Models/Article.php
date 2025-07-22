@@ -18,6 +18,7 @@ class Article extends Model
         'contenu',
         'image',
         'banniere_article',
+        'categorie',
         'date_publication',
         'id_utilisateur',
     ];
