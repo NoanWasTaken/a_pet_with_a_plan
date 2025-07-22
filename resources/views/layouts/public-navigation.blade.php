@@ -87,7 +87,7 @@
                             
                             @if(auth()->user()->isAdmin() || auth()->user()->isModerator())
                                 <div class="border-t border-gray-100"></div>
-                                <a href="{{ route('dashboard') }}" 
+                                <a href="{{ route('produits.index') }}" 
                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Administration
                                 </a>
@@ -171,7 +171,7 @@
                     </a>
                     
                     @if(auth()->user()->isAdmin() || auth()->user()->isModerator())
-                        <a href="{{ route('dashboard') }}" 
+                        <a href="{{ route('produits.index') }}" 
                            class="block px-3 py-2 text-gray-700 hover:text-gray-600">
                             Administration
                         </a>

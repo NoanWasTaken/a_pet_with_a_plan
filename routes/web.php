@@ -33,10 +33,6 @@ Route::get('/faq', [FAQController::class, 'index'])->name('faq.index');
 // Panier (accessible sans authentification pour voir, auth requis pour modifier)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     // Profil utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
