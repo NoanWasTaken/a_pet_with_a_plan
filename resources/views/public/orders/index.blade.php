@@ -42,7 +42,7 @@
                                             {{ ucfirst($commande->statut) }}
                                         </span>
                                         <span class="text-lg font-bold text-green-600">
-                                            {{ number_format($commande->montant / 100, 2, ',', ' ') }} €
+                                            {{ $commande->total_formate }}
                                         </span>
                                     </div>
                                 </div>

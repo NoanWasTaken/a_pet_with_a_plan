@@ -33,10 +33,6 @@ Route::get('/faq', [FAQController::class, 'index'])->name('faq.index');
 // Panier (accessible sans authentification pour voir, auth requis pour modifier)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
 Route::middleware('auth')->group(function () {
     // Profil utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -80,6 +76,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Routes pour les commandes
     Route::resource('commandes', CommandeController::class);
+    Route::patch('commandes/{commande}/statut', [CommandeController::class, 'updateStatut'])->name('commandes.update-statut');
 });
 
 require __DIR__.'/auth.php';

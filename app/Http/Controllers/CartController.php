@@ -64,7 +64,7 @@ class CartController extends Controller
                 'success' => true,
                 'message' => $message,
                 'cart_count' => $cart->total_items,
-                'cart_total' => $cart->total_euros
+                'cart_total' => $cart->total_formate
             ]);
         }
 
@@ -96,8 +96,8 @@ class CartController extends Controller
         return response()->json([
             'success' => true,
             'cart_count' => $cart->total_items,
-            'cart_total' => $cart->total_euros,
-            'item_total' => $cartItem->total_euros
+            'cart_total' => $cart->total_formate,
+            'item_total' => $cartItem->total_formate
         ]);
     }
 
@@ -122,7 +122,7 @@ class CartController extends Controller
             'success' => true,
             'message' => 'Article supprimé du panier',
             'cart_count' => $cart->total_items,
-            'cart_total' => $cart->total_euros
+            'cart_total' => $cart->total_formate
         ]);
     }
 
@@ -154,7 +154,7 @@ class CartController extends Controller
         
         return response()->json([
             'count' => $cart->total_items,
-            'total' => $cart->total_euros
+            'total' => $cart->total_formate
         ]);
     }
 }

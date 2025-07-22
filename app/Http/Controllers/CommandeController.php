@@ -14,7 +14,9 @@ class CommandeController extends Controller
     // Afficher la liste des commandes
     public function index(): View
     {
-        $commandes = Commande::with(['utilisateur', 'produits'])->paginate(10);
+        $commandes = Commande::with(['utilisateur', 'produits'])
+            ->orderBy('date_commande', 'desc')
+            ->paginate(10);
         return view('commandes.index', compact('commandes'));
     }
 
@@ -32,6 +34,7 @@ class CommandeController extends Controller
         $validated = $request->validate([
             'id_utilisateur' => 'required|exists:utilisateur,id',
             'date_commande' => 'required|date',
+            'statut' => 'sometimes|in:en_attente,confirmee,en_cours,livree,annulee,echouee',
             'produits' => 'required|array',
             'produits.*.id' => 'required|exists:produit,id',
             'produits.*.quantite' => 'required|integer|min:1',
@@ -41,6 +44,7 @@ class CommandeController extends Controller
         $commande = Commande::create([
             'id_utilisateur' => $validated['id_utilisateur'],
             'date_commande' => $validated['date_commande'],
+            'statut' => $validated['statut'] ?? 'en_attente',
         ]);
 
         // Ajouter les produits à la commande
@@ -78,6 +82,7 @@ class CommandeController extends Controller
         $validated = $request->validate([
             'id_utilisateur' => 'required|exists:utilisateur,id',
             'date_commande' => 'required|date',
+            'statut' => 'sometimes|in:en_attente,confirmee,en_cours,livree,annulee,echouee',
             'produits' => 'required|array',
             'produits.*.id' => 'required|exists:produit,id',
             'produits.*.quantite' => 'required|integer|min:1',
@@ -86,6 +91,7 @@ class CommandeController extends Controller
         $commande->update([
             'id_utilisateur' => $validated['id_utilisateur'],
             'date_commande' => $validated['date_commande'],
+            'statut' => $validated['statut'] ?? $commande->statut,
         ]);
 
         // Supprimer les anciennes relations
@@ -111,6 +117,21 @@ class CommandeController extends Controller
 
         return redirect()->route('commandes.index')
             ->with('success', 'Commande supprimée avec succès.');
+    }
+
+    // Mettre à jour le statut d'une commande
+    public function updateStatut(Request $request, Commande $commande): RedirectResponse
+    {
+        $validated = $request->validate([
+            'statut' => 'required|in:en_attente,confirmee,en_cours,livree,annulee,echouee',
+        ]);
+
+        $commande->update([
+            'statut' => $validated['statut'],
+        ]);
+
+        return redirect()->route('commandes.index')
+            ->with('success', 'Statut de la commande mis à jour avec succès.');
     }
 
     // Afficher les commandes d'un utilisateur spécifique
