@@ -14,6 +14,7 @@ use App\Http\Controllers\FAQController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ChatbotController;
 use Illuminate\Support\Facades\Route;
 
 // Routes publiques
@@ -32,6 +33,11 @@ Route::get('/faq', [FAQController::class, 'index'])->name('faq.index');
 
 // Panier (accessible sans authentification pour voir, auth requis pour modifier)
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+
+// Chatbot (accessible à tous)
+Route::post('/chatbot/init', [ChatbotController::class, 'initSession'])->name('chatbot.init');
+Route::post('/chatbot/message', [ChatbotController::class, 'sendMessage'])->name('chatbot.message');
+Route::get('/chatbot/history', [ChatbotController::class, 'getHistory'])->name('chatbot.history');
 
 Route::middleware('auth')->group(function () {
     // Profil utilisateur
