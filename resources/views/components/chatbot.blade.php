@@ -1,10 +1,10 @@
 {{-- Chatbot Widget --}}
-<div class="fixed bottom-5 right-5" style="position: fixed !important; bottom: 20px !important; right: 20px !important; z-index: 9999 !important;" x-data="chatbot()" @click.away="isOpen = false">
+<div class="fixed bottom-5 right-5" style="position: fixed !important; bottom: 20px !important; right: 20px !important; z-index: 9999 !important;" x-data="chatbot()" x-init="init()" @click.away="isOpen = false">
     {{-- Bouton du chatbot --}}
     <button 
         @click="toggleChat()"
         style="width: 64px !important; height: 64px !important; border-radius: 50% !important; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important; color: white !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1.5rem !important;"
-        class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-2xl transform hover:scale-110"
+        class="chatbot-widget w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-2xl transform hover:scale-110"
         :class="{ 'bg-gradient-to-br from-red-500 to-red-600': isOpen }"
     >
         <span x-text="isOpen ? '×' : '🩺'"></span>
@@ -19,7 +19,7 @@
         x-transition:leave="transition ease-in duration-200"
         x-transition:leave-start="opacity-100 transform translate-y-0"
         x-transition:leave-end="opacity-0 transform translate-y-4"
-        class="absolute bottom-20 right-0 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
+        class="absolute bottom-full right-0 mb-4 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col overflow-hidden"
     >
         {{-- En-tête --}}
         <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">
@@ -108,6 +108,7 @@ function chatbot() {
         sessionId: null,
 
         init() {
+            console.log('Chatbot initialized');
             this.initSession();
         },
 

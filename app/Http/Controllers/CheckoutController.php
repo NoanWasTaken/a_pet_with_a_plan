@@ -88,24 +88,34 @@ class CheckoutController extends Controller
             
             // Créer la commande en base avant le paiement
             \Log::info('Création de la commande en base');
+            $user = auth()->user();
+            
+            // Calculer le total dans la devise de l'utilisateur
+            $totalInUserCurrency = $user->convertFromEuros($cart->total / 100);
+            $totalInUserCurrencyCents = (int) round($totalInUserCurrency * 100);
+            
             $commande = Commande::create([
                 'id_utilisateur' => auth()->id(),
-                'total' => $cart->total,
+                'total' => $totalInUserCurrencyCents, // Total en centimes de la devise utilisateur
                 'statut' => 'en_attente',
                 'date_commande' => now(),
+                'devise' => $user->devise_preferee ?? 'EUR',
             ]);
             \Log::info('Commande créée avec ID: ' . $commande->id);
 
-            // Ajouter les produits à la commande
+            // Ajouter les produits à la commande avec les prix dans la devise de l'utilisateur
             foreach ($cart->items as $item) {
+                // Convertir le prix en centimes de la devise de l'utilisateur
+                $priceInUserCurrency = $user->convertFromEuros($item->price / 100);
+                $priceInUserCurrencyCents = (int) round($priceInUserCurrency * 100);
+                
                 $commande->produits()->attach($item->produit_id, [
                     'quantite' => $item->quantity,
-                    'prix_unitaire' => $item->price,
+                    'prix_unitaire' => $priceInUserCurrencyCents, // Prix en centimes de la devise utilisateur
                 ]);
             }
 
             // Préparer les line items pour Stripe
-            $user = auth()->user();
             $userCurrency = strtolower($user->devise_preferee ?? 'eur');
             $lineItems = [];
             foreach ($cart->items as $item) {

@@ -23,6 +23,8 @@ class User extends Authenticatable
         'mot_de_passe',
         'statut',
         'devise_preferee',
+        'aime_chiens',
+        'aime_chats',
     ];
 
     // The attributes that should be hidden for serialization.
@@ -171,5 +173,43 @@ class User extends Authenticatable
     {
         $priceInEuros = $priceInCents / 100;
         return number_format($priceInEuros, 2, ',', ' ') . ' €';
+    }
+
+    // Vérifie si l'utilisateur aime les chiens
+    public function aimeLesChiens()
+    {
+        return $this->aime_chiens;
+    }
+
+    // Vérifie si l'utilisateur aime les chats
+    public function aimeLesChats()
+    {
+        return $this->aime_chats;
+    }
+
+    // Retourne les catégories préférées de l'utilisateur
+    public function getCategoriesPreferees()
+    {
+        $categories = [];
+        if ($this->aime_chiens) {
+            $categories[] = 'Chien';
+        }
+        if ($this->aime_chats) {
+            $categories[] = 'Chat';
+        }
+        return $categories;
+    }
+
+    // Retourne la catégorie principale (pour les utilisateurs qui n'aiment qu'un type d'animal)
+    public function getCategoriePreferee()
+    {
+        if ($this->aime_chiens && !$this->aime_chats) {
+            return 'Chien';
+        }
+        if ($this->aime_chats && !$this->aime_chiens) {
+            return 'Chat';
+        }
+        // Si l'utilisateur aime les deux ou aucun, on retourne null
+        return null;
     }
 }

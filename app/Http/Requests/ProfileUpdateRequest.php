@@ -23,6 +23,8 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique('utilisateur', 'email')->ignore($this->user()->id),
             ],
             'devise_preferee' => ['required', 'in:EUR,USD,GBP,CAD'],
+            'aime_chiens' => ['required', 'in:0,1'],
+            'aime_chats' => ['required', 'in:0,1'],
         ];
     }
 }

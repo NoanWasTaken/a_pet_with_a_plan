@@ -77,10 +77,10 @@
                                                 <!-- Prix -->
                                                 <div class="text-right">
                                                     <div class="text-lg font-medium text-gray-800">
-                                                        {{ number_format(($produit->pivot->prix ?? $produit->prix) / 100, 2, ',', ' ') }} €
+                                                        {{ $commande->formatPrix($produit->pivot->prix_unitaire) }}
                                                     </div>
                                                     <div class="text-sm text-gray-500">
-                                                        {{ number_format($produit->prix / 100, 2, ',', ' ') }} € / unité
+                                                        Quantité : {{ $produit->pivot->quantite ?? 1 }}
                                                     </div>
                                                 </div>
                                             </div>

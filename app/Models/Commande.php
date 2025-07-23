@@ -72,7 +72,26 @@ class Commande extends Model
 
         $symbol = $symbols[$devise] ?? $devise;
         
-        return number_format($total, 2) . $symbol;
+        return number_format($total, 2, ',', ' ') . ' ' . $symbol;
+    }
+
+    // Formate un prix en centimes avec la devise de la commande
+    public function formatPrix($priceInCents)
+    {
+        // Les prix sont déjà stockés dans la devise de la commande
+        $priceInMainUnit = $priceInCents / 100;
+        $devise = $this->devise ?? 'EUR';
+        
+        $symbols = [
+            'EUR' => '€',
+            'USD' => '$',
+            'GBP' => '£',
+            'CAD' => 'C$',
+        ];
+
+        $symbol = $symbols[$devise] ?? $devise;
+        
+        return number_format($priceInMainUnit, 2, ',', ' ') . ' ' . $symbol;
     }
 
     // Scope pour récupérer les commandes récentes.

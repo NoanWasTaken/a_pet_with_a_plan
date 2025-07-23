@@ -24,7 +24,7 @@ class ShopController extends Controller
         }
 
         // Tri
-        switch ($request->get('sort', 'name')) {
+        switch ($request->get('sort', 'default')) {
             case 'price_asc':
                 $query->orderBy('prix', 'asc');
                 break;
@@ -34,8 +34,37 @@ class ShopController extends Controller
             case 'newest':
                 $query->latest();
                 break;
+            case 'name_asc':
+                $query->orderBy('nom', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('nom', 'desc');
+                break;
+            case 'default':
             default:
-                $query->orderBy('nom');
+                // Tri personnalisé basé sur les préférences utilisateur
+                if (auth()->check()) {
+                    $user = auth()->user();
+                    $categoriesPreferees = $user->getCategoriesPreferees();
+                    
+                    if (!empty($categoriesPreferees)) {
+                        // Si l'utilisateur a des préférences, on priorise ces catégories
+                        if (count($categoriesPreferees) === 1) {
+                            // L'utilisateur préfère un seul type d'animal
+                            $query->orderByRaw("CASE WHEN categorie = ? THEN 0 ELSE 1 END, nom", [$categoriesPreferees[0]]);
+                        } else {
+                            // L'utilisateur aime les deux types d'animaux, on garde l'ordre par nom
+                            $query->orderBy('nom');
+                        }
+                    } else {
+                        // Pas de préférence définie, ordre par nom
+                        $query->orderBy('nom');
+                    }
+                } else {
+                    // Utilisateur non connecté, ordre par nom
+                    $query->orderBy('nom');
+                }
+                break;
         }
 
         $produits = $query->paginate(12);

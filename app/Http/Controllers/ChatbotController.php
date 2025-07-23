@@ -138,16 +138,17 @@ Voici quelques produits qui pourraient vous aider :";
 
     private function findMatchingResponse(string $message): ?ChatResponse
     {
-        // Recherche par mots-clés
+        // Recherche par mots-clés et triggers regex
         $responses = ChatResponse::active()->byPriority()->get();
         
         foreach ($responses as $response) {
-            // Vérifier le trigger principal
-            if (Str::contains($message, strtolower($response->trigger))) {
+            // Vérifier le trigger comme expression régulière
+            $pattern = '/(' . $response->trigger . ')/i';
+            if (preg_match($pattern, $message)) {
                 return $response;
             }
             
-            // Vérifier les mots-clés
+            // Vérifier les mots-clés individuels
             if ($response->keywords) {
                 foreach ($response->keywords as $keyword) {
                     if (Str::contains($message, strtolower($keyword))) {

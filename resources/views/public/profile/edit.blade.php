@@ -130,6 +130,57 @@
                             @enderror
                         </div>
 
+                        <!-- Préférences d'animaux -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-3">Mes animaux de compagnie</label>
+                            <p class="text-sm text-gray-500 mb-4">Sélectionnez vos animaux pour personnaliser vos recommandations dans la boutique</p>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Chiens -->
+                                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200">
+                                    <input type="hidden" name="aime_chiens" value="0">
+                                    <input type="checkbox" 
+                                           id="aime_chiens" 
+                                           name="aime_chiens" 
+                                           value="1"
+                                           {{ old('aime_chiens', $user->aime_chiens) ? 'checked' : '' }}
+                                           class="w-4 h-4 text-orange-600 bg-gray-100 border-gray-300 rounded focus:ring-orange-500 focus:ring-2">
+                                    <label for="aime_chiens" class="ml-3 flex items-center cursor-pointer">
+                                        <span class="text-2xl mr-2">🐕</span>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-700">J'ai un chien</div>
+                                            <div class="text-xs text-gray-500">Produits pour chiens</div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <!-- Chats -->
+                                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition duration-200">
+                                    <input type="hidden" name="aime_chats" value="0">
+                                    <input type="checkbox" 
+                                           id="aime_chats" 
+                                           name="aime_chats" 
+                                           value="1"
+                                           {{ old('aime_chats', $user->aime_chats) ? 'checked' : '' }}
+                                           class="w-4 h-4 text-purple-600 bg-gray-100 border-gray-300 rounded focus:ring-purple-500 focus:ring-2">
+                                    <label for="aime_chats" class="ml-3 flex items-center cursor-pointer">
+                                        <span class="text-2xl mr-2">🐱</span>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-700">J'ai un chat</div>
+                                            <div class="text-xs text-gray-500">Produits pour chats</div>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            @error('aime_chiens')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            @error('aime_chats')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div class="flex justify-end">
                             <button type="submit" class="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition duration-300">
                                 Mettre à jour

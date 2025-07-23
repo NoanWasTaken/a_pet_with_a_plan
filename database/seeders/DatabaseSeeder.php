@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ProduitSeeder::class,
             ArticleSeeder::class,
             CommandeSeeder::class,
+            ChatbotSeeder::class,
         ]);
     }
 }

@@ -32,13 +32,7 @@
                         </div>
                         <div>
                             <span class="font-medium text-gray-600">Total :</span>
-                            <span class="text-gray-800 font-semibold">
-                                @if(auth()->check())
-                                    {{ auth()->user()->formatPrice($commande->total) }}
-                                @else
-                                    {{ \App\Models\User::formatPriceGuest($commande->total) }}
-                                @endif
-                            </span>
+                            <span class="text-gray-800 font-semibold">{{ $commande->total_formate }}</span>
                         </div>
                         <div>
                             <span class="font-medium text-gray-600">Statut :</span>
