@@ -46,6 +46,9 @@
             <x-footer-dark />
         @endif
 
+        <!-- Chatbot -->
+        <x-chatbot />
+
         <!-- Scripts supplémentaires -->
         @stack('scripts')
         

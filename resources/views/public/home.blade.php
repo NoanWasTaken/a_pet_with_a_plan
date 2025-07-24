@@ -29,11 +29,37 @@
             </div>
         </section>   
          <div class="max-w-7xl mx-auto my-12 px-4">
-<h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Nos recommandations pour votre quotidien</h2>
-<p>Chaque produit sélectionné incarne notre engagement pour un bien-être animal véritablement personnalisé. Nous
-                privilégions l'esthétique, la fonctionnalité et la cohérence avec l'environnement de vie que vous partagez
-                avec votre compagnon. Rien n'est laissé au hasard — chaque choix a du sens.</p>
-</div>
+            @auth
+                @php
+                    $user = auth()->user();
+                    $categoriesPreferees = $user->getCategoriesPreferees();
+                @endphp
+                @if(!empty($categoriesPreferees))
+                    @if(count($categoriesPreferees) === 1)
+                        @if($categoriesPreferees[0] === 'Chien')
+                            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Spécialement sélectionné pour votre chien</h2>
+                            <p>Des produits adaptés aux besoins spécifiques de votre fidèle compagnon. Nous avons mis l'accent sur les articles pour chiens selon vos préférences.</p>
+                        @else
+                            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Spécialement sélectionné pour votre chat</h2>
+                            <p>Des produits raffinés pour votre félin. Nous avons privilégié les articles pour chats selon vos préférences.</p>
+                        @endif
+                    @else
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Recommandations personnalisées pour vos compagnons</h2>
+                        <p>Une sélection équilibrée pour tous vos animaux de compagnie, adaptée à vos préférences pour les chiens et les chats.</p>
+                    @endif
+                @else
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Nos recommandations pour votre quotidien</h2>
+                    <p>Chaque produit sélectionné incarne notre engagement pour un bien-être animal véritablement personnalisé. 
+                    <a href="{{ route('profile.edit') }}" class="text-blue-600 hover:text-blue-800 underline">Définissez vos préférences</a> 
+                    pour une expérience sur mesure.</p>
+                @endif
+            @else
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Nos recommandations pour votre quotidien</h2>
+                <p>Chaque produit sélectionné incarne notre engagement pour un bien-être animal véritablement personnalisé. 
+                <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-800 underline">Créez un compte</a> 
+                pour une expérience personnalisée.</p>
+            @endauth
+        </div>
             </div>
 
             <!-- Section Chiens -->
@@ -51,32 +77,32 @@
                     </div>
 
                     <!-- Grille de produits pour chiens à droite -->
-                    <div class="lg:order-2 h-full">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 h-full p-4">
+                    <div class="lg:order-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 p-6">
                             @forelse($dogProducts as $produit)
-                                <a href="{{ route('shop.show', $produit) }}" class="h-full">
-                                    <div class="bg-white shadow-md rounded-md hover:shadow-xl transition duration-300 overflow-hidden h-full flex flex-col">
-                                            <div class="overflow-hidden">
+                                <a href="{{ route('shop.show', $produit) }}" class="block">
+                                    <div class="bg-white shadow-lg rounded-lg hover:shadow-xl transition duration-300 overflow-hidden h-full flex flex-col">
+                                        <div class="overflow-hidden">
                                             @if($produit->image_path)
                                                 <img src="{{ asset('storage/' . $produit->image_path) }}" alt="{{ $produit->nom }}"
-                                                    class="w-full object-cover h-56">
+                                                    class="w-full object-cover h-48 lg:h-56">
                                             @else
-                                                <div class="flex items-center justify-center h-32 bg-gradient-to-br from-orange-100 to-amber-100">
-                                                    <span class="text-3xl">🐕</span>
+                                                <div class="flex items-center justify-center h-48 lg:h-56 bg-gradient-to-br from-orange-100 to-amber-100">
+                                                    <span class="text-4xl">🐕</span>
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="p-3 flex-1 flex flex-col">
-                                            <div class="flex justify-between mb-2 flex-1">
-                                                <h4 class="text-sm font-bold text-black line-clamp-2 uppercase">{{ $produit->nom }}</h4>
-                                                <span class="text-sm font-bold whitespace-nowrap text-black">{{ $produit->prix_formate }}</span>
+                                        <div class="p-4 flex-1 flex flex-col">
+                                            <div class="flex justify-between mb-3 flex-1">
+                                                <h4 class="text-base font-bold text-black line-clamp-2 uppercase">{{ $produit->nom }}</h4>
+                                                <span class="text-base font-bold whitespace-nowrap text-black ml-2">{{ $produit->prix_formate }}</span>
                                             </div>
                                             @auth
                                                 <form action="{{ route('cart.add') }}" method="POST" class="mt-auto">
                                                     @csrf
                                                     <input type="hidden" name="produit_id" value="{{ $produit->id }}">
                                                     <button type="submit"
-                                                        class="w-full bg-gray-800 text-white py-2 rounded-md font-semibold hover:bg-gray-700 transition duration-300 block">
+                                                        class="w-full bg-gray-800 text-white py-2 px-4 rounded-md font-semibold hover:bg-gray-700 transition duration-300 text-sm">
                                                         Ajouter au panier
                                                     </button>
                                                 </form>
@@ -85,7 +111,7 @@
                                     </div>
                                 </a>
                             @empty
-                                <div class="col-span-2 text-center py-8">
+                                <div class="col-span-full text-center py-8">
                                     <p class="text-gray-500">Aucun produit pour chiens disponible.</p>
                                 </div>
                             @endforelse
@@ -99,32 +125,32 @@
                 <h2 class="block lg:hidden text-3xl md:text-4xl font-bold text-gray-800 mb-2 px-4 mt-12 lg:mt-0">Pour nos amis les chats</h2>
                 <div class="grid lg:grid-cols-2 items-center">
                     <!-- Grille de produits pour chats à gauche -->
-                    <div class="h-full p-4">
-                        <div class="grid grid-cols-2 gap-4 h-full">
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                             @forelse($catProducts as $produit)
-                                <a href="{{ route('shop.show', $produit) }}" class="h-full">
-                                    <div class="bg-white shadow-md rou  nded-md hover:shadow-xl transition duration-300 overflow-hidden h-full flex flex-col">
+                                <a href="{{ route('shop.show', $produit) }}" class="block">
+                                    <div class="bg-white shadow-lg rounded-lg hover:shadow-xl transition duration-300 overflow-hidden h-full flex flex-col">
                                         <div class="overflow-hidden">
                                             @if($produit->image_path)
                                                 <img src="{{ asset('storage/' . $produit->image_path) }}" alt="{{ $produit->nom }}"
-                                                    class="w-full object-cover h-56">
+                                                    class="w-full object-cover h-48 lg:h-56">
                                             @else
-                                                <div class="flex items-center justify-center h-32 bg-gradient-to-br from-purple-100 to-pink-100">
-                                                    <span class="text-3xl">🐱</span>
+                                                <div class="flex items-center justify-center h-48 lg:h-56 bg-gradient-to-br from-purple-100 to-pink-100">
+                                                    <span class="text-4xl">🐱</span>
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="p-3 flex-1 flex flex-col">
-                                            <div class="flex justify-between mb-2 flex-1">
-                                                <h4 class="text-sm font-bold text-black line-clamp-2 uppercase">{{ $produit->nom }}</h4>
-                                                <span class="text-sm font-bold whitespace-nowrap text-black">{{ $produit->prix_formate }}</span>
+                                        <div class="p-4 flex-1 flex flex-col">
+                                            <div class="flex justify-between mb-3 flex-1">
+                                                <h4 class="text-base font-bold text-black line-clamp-2 uppercase">{{ $produit->nom }}</h4>
+                                                <span class="text-base font-bold whitespace-nowrap text-black ml-2">{{ $produit->prix_formate }}</span>
                                             </div>
                                             @auth
                                                 <form action="{{ route('cart.add') }}" method="POST" class="mt-auto">
                                                     @csrf
                                                     <input type="hidden" name="produit_id" value="{{ $produit->id }}">
                                                     <button type="submit"
-                                                        class="w-full bg-gray-800 text-white py-2 rounded-md font-semibold hover:bg-gray-700 transition duration-300 block">
+                                                        class="w-full bg-gray-800 text-white py-2 px-4 rounded-md font-semibold hover:bg-gray-700 transition duration-300 text-sm">
                                                         Ajouter au panier
                                                     </button>
                                                 </form>
@@ -133,7 +159,7 @@
                                     </div>
                                 </a>
                             @empty
-                                <div class="col-span-2 text-center py-8">
+                                <div class="col-span-full text-center py-8">
                                     <p class="text-gray-500">Aucun produit pour chats disponible.</p>
                                 </div>
                             @endforelse

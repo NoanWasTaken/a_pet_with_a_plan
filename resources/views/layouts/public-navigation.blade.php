@@ -1,4 +1,4 @@
-<nav class="bg-white shadow-lg w-full">
+<nav class="bg-white shadow-lg w-full" x-data="{ mobileOpen: false }">
     <div class="container mx-auto px-8">
         <div class="flex justify-between h-16 items-center">
             <!-- Logo et navigation principale -->
@@ -119,8 +119,7 @@
 
                 <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button x-data="{ mobileOpen: false }" 
-                            @click="mobileOpen = !mobileOpen"
+                    <button @click="mobileOpen = !mobileOpen"
                             type="button" 
                             class="text-gray-700 hover:text-gray-600 focus:outline-none">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -133,8 +132,7 @@
     </div>
 
     <!-- Mobile Navigation -->
-    <div x-data="{ mobileOpen: false }" 
-         x-show="mobileOpen" 
+    <div x-show="mobileOpen" 
          class="md:hidden bg-white border-t border-gray-200">
         <div class="px-2 pt-2 pb-3 space-y-1">
             <a href="{{ route('home') }}" 

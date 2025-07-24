@@ -22,7 +22,13 @@ class ProfileController extends Controller
     // Met à jour les informations de profil de l'utilisateur.
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
+        
+        // Convertir les valeurs des checkboxes en booléens
+        $validated['aime_chiens'] = (bool) ($validated['aime_chiens'] ?? false);
+        $validated['aime_chats'] = (bool) ($validated['aime_chats'] ?? false);
+        
+        $request->user()->fill($validated);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
