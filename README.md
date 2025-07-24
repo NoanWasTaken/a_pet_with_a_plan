@@ -228,7 +228,7 @@ FORWARD_VITE_PORT=5174     # Au lieu de 5173
 
 ### Prix des Produits
 
-Les prix sont stockés en **centimes** dans la base de données mais affichés en **euros** :
+Les prix sont stockés en **centimes** dans la base de données, convertis a un taux de conversion fixe pour les devises différentes, mais affichés **dans la devise préférée de l'utilisateur** :
 
 ```php
 // Dans le modèle Produit
