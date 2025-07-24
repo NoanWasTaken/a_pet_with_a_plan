@@ -118,9 +118,9 @@
                 <!-- Grille de produits -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     @forelse($produits as $produit)
-                        <a href="{{ route('shop.show', $produit) }}">
-                            <div
-                                class="bg-white rounded-lg shadow-md hover:shadow-xl transition duration-300 overflow-hidden group h-full flex flex-col">
+                        <div
+                            class="bg-white rounded-lg shadow-md hover:shadow-xl transition duration-300 overflow-hidden group h-full flex flex-col">
+                            <a href="{{ route('shop.show', $produit) }}" class="flex-1 flex flex-col">
                                 <div
                                     class="relative bg-gradient-to-br from-{{ $produit->categorie === 'Chien' ? 'orange' : 'purple' }}-100 to-{{ $produit->categorie === 'Chien' ? 'amber' : 'pink' }}-100">
                                     @if($produit->image_path)
@@ -156,27 +156,25 @@
                                         </div>
                                         <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ $produit->description }}</p>
                                     </div>
-
-                                    <div class="flex gap-2">
-                                        @auth
-                                            <form action="{{ route('cart.add') }}" method="POST" class="flex-1">
-                                                @csrf
-                                                <input type="hidden" name="produit_id" value="{{ $produit->id }}">
-                                                <button type="submit"
-                                                    class="w-full bg-gray-800 text-white py-2 rounded-md font-semibold hover:bg-gray-700 transition duration-300 block">
-                                                    Ajouter au panier
-                                                </button>
-                                            </form>
-                                        @else
-                                            <a href="{{ route('login') }}"
-                                                class="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg text-center text-sm hover:bg-gray-700 transition duration-300">
-                                                Se connecter
-                                            </a>
-                                        @endauth
-                                    </div>
+                                </div>
+                            </a>
+                            
+                            <!-- Actions séparées du lien principal -->
+                            <div class="px-6 pb-6">
+                                <div class="flex gap-2">
+                                    @auth
+                                        <form action="{{ route('cart.add') }}" method="POST" class="flex-1">
+                                            @csrf
+                                            <input type="hidden" name="produit_id" value="{{ $produit->id }}">
+                                            <button type="submit"
+                                                class="w-full bg-gray-800 text-white py-2 mb-4 rounded-md font-semibold hover:bg-gray-700 transition duration-300 block">
+                                                Ajouter au panier
+                                            </button>
+                                        </form>
+                                    @endauth
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     @empty
                         <div class="col-span-full text-center py-16">
                             <div class="text-6xl mb-4">🔍</div>

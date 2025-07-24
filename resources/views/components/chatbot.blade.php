@@ -3,11 +3,11 @@
     {{-- Bouton du chatbot --}}
     <button 
         @click="toggleChat()"
-        style="width: 64px !important; height: 64px !important; border-radius: 50% !important; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%) !important; color: white !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1.5rem !important;"
-        class="chatbot-widget w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-2xl transform hover:scale-110"
+        style="width: 64px !important; height: 64px !important; border-radius: 50% !important; background: #e5e7eb !important; border: none !important; cursor: pointer !important; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important; display: flex !important; align-items: center !important; justify-content: center !important; font-size: 1.5rem !important;"
+        class="chatbot-widget w-16 h-16 hover:from-blue-600 hover:to-purple-700 text-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center text-2xl transform hover:scale-110"
         :class="{ 'bg-gradient-to-br from-red-500 to-red-600': isOpen }"
     >
-        <span x-text="isOpen ? '×' : '🩺'"></span>
+        <span x-text="isOpen ? '×' : '💬'"></span>
     </button>
 
     {{-- Fenêtre du chatbot --}}
@@ -23,7 +23,7 @@
     >
         {{-- En-tête --}}
         <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">
-            <h3 class="font-semibold text-lg">🩺 Assistant Vétérinaire</h3>
+            <h3 class="font-semibold text-lg">💬 Assistant Vétérinaire</h3>
             <button @click="isOpen = false" class="text-white hover:text-gray-200 text-xl leading-none">
                 ×
             </button>
